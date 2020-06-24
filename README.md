@@ -735,7 +735,7 @@ response->print("</body></html>");
 request->send(response);
 ```
 
-### ArduinoJson Basic Response
+### ArduinoJson ver5.0 Basic Response
 This way of sending Json is great for when the result is below 4KB
 ```cpp
 #include "AsyncJson.h"
@@ -748,6 +748,22 @@ JsonObject &root = jsonBuffer.createObject();
 root["heap"] = ESP.getFreeHeap();
 root["ssid"] = WiFi.SSID();
 root.printTo(*response);
+request->send(response);
+```
+
+### ArduinoJson ver6.0 Basic Response
+This way of sending Json is great for when the result is below 4KB
+```cpp
+#include "AsyncJson.h"
+#include "ArduinoJson.h"
+
+
+AsyncResponseStream *response = request->beginResponseStream("application/json");
+//must be sized correctly to length of JSON string (1024) for example only.
+DynamicJsonDocument jsonDoc(1024);
+jsonDoc["heap"] = ESP.getFreeHeap();
+jsonDoc["ssid"] = WiFi.SSID();
+serializeJson(jsonDoc, *response);
 request->send(response);
 ```
 
